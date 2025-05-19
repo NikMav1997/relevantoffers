@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Panel - Relevant Offers</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-4">
+  <div class="max-w-4xl mx-auto space-y-4">
+    <h1 class="text-2xl font-bold">Админка - Relevant Offers</h1>
+    <form method="POST" action="/add" class="space-y-2 bg-white p-4 rounded-xl shadow">
+      <input name="title" placeholder="Заголовок" class="w-full p-2 border rounded" required>
+      <input name="subtitle" placeholder="Подзаголовок" class="w-full p-2 border rounded">
+      <input name="image" placeholder="URL картинки" class="w-full p-2 border rounded" required>
+      <input name="url" placeholder="Keitaro-ссылка" class="w-full p-2 border rounded" required>
+      <input name="button" placeholder="Надпись кнопки" class="w-full p-2 border rounded" required>
+      <button type="submit" class="bg-green-600 text-white py-2 px-4 rounded">Добавить оффер</button>
+    </form>
+
+    <form method="POST" action="/set_background" class="bg-white p-4 rounded-xl shadow space-y-2">
+      <input name="background" placeholder="URL фоновой картинки" value="{{ background }}" class="w-full p-2 border rounded">
+      <button type="submit" class="bg-blue-600 text-white py-2 px-4 rounded">Установить фон</button>
+    </form>
+
+    <h2 class="text-xl font-bold">Список офферов</h2>
+    {% for offer in offers %}
+      <div class="bg-white p-4 rounded-xl shadow flex justify-between items-center">
+        <div>
+          <strong>{{ offer.title }}</strong><br>
+          <small>{{ offer.url }}</small>
+        </div>
+        <a href="/delete/{{ loop.index0 }}" class="text-red-600">Удалить</a>
+      </div>
+    {% endfor %}
+    <a href="/logout" class="text-blue-600">Выйти</a>
+  </div>
+</body>
+</html>
