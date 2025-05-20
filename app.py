@@ -1,88 +1,75 @@
-from flask import Flask, render_template, request, redirect, url_for, session
-import json
-import os
+
+from flask import Flask, render_template, request, redirect, session
+import json, os
 
 app = Flask(__name__)
 app.secret_key = "relevant123"
 
 DATA_FILE = "data.json"
-BACKGROUND_FILE = "background.txt"
-ADMIN_PASSWORD = "relevant123"
+BG_FILE = "background.txt"
+HEADER_FILE = "header.txt"
 
 def load_data():
-    if os.path.exists(DATA_FILE):
-        with open(DATA_FILE, "r") as f:
-            return json.load(f)
-    return []
-
-def save_data(data):
-    with open(DATA_FILE, "w") as f:
-        json.dump(data, f)
-
-def load_background():
-    if os.path.exists(BACKGROUND_FILE):
-        with open(BACKGROUND_FILE, "r") as f:
-            return f.read().strip()
-    return ""
-
-def save_background(url):
-    with open(BACKGROUND_FILE, "w") as f:
-        f.write(url)
+    return json.load(open(DATA_FILE)) if os.path.exists(DATA_FILE) else []
 
 @app.route("/")
 def index():
     offers = load_data()
-    background = load_background()
-    return render_template("index.html", offers=offers, background=background)
+    bg = open(BG_FILE).read() if os.path.exists(BG_FILE) else ""
+    header_text = open(HEADER_FILE).read() if os.path.exists(HEADER_FILE) else ""
+    return render_template("index.html", offers=offers, background=bg, header_text=header_text)
 
-@app.route("/admin", methods=["GET", "POST"])
+@app.route("/admin", methods=["GET"])
 def admin():
-    if "logged_in" not in session:
-        if request.method == "POST":
-            if request.form.get("password") == ADMIN_PASSWORD:
-                session["logged_in"] = True
-                return redirect(url_for("admin"))
-        return render_template("login.html")
-
+    if not session.get("auth"):
+        return redirect("/login")
     offers = load_data()
-    background = load_background()
-    return render_template("admin.html", offers=offers, background=background)
+    bg = open(BG_FILE).read() if os.path.exists(BG_FILE) else ""
+    header_text = open(HEADER_FILE).read() if os.path.exists(HEADER_FILE) else ""
+    return render_template("admin.html", offers=offers, background=bg, header_text=header_text)
+
+@app.route("/set_header", methods=["POST"])
+def set_header():
+    if not session.get("auth"):
+        return redirect("/login")
+    with open(HEADER_FILE, "w") as f:
+        f.write(request.form.get("header", ""))
+    return redirect("/admin")
 
 @app.route("/add", methods=["POST"])
 def add():
-    if "logged_in" in session:
-        offers = load_data()
-        new_offer = {
-            "title": request.form.get("title"),
-            "subtitle": request.form.get("subtitle"),
-            "image": request.form.get("image"),
-            "url": request.form.get("url"),
-            "button": request.form.get("button")
-        }
-        offers.append(new_offer)
-        save_data(offers)
-    return redirect(url_for("admin"))
+    if not session.get("auth"):
+        return redirect("/login")
+    offers = load_data()
+    offers.append({
+        "title": request.form["title"],
+        "subtitle": request.form["subtitle"],
+        "image": request.form["image"],
+        "url": request.form["url"],
+        "button": request.form["button"],
+        "timer": int(request.form["timer"]),
+    })
+    json.dump(offers, open(DATA_FILE, "w"), indent=2)
+    return redirect("/admin")
 
-@app.route("/delete/<int:index>")
-def delete(index):
-    if "logged_in" in session:
-        offers = load_data()
-        if 0 <= index < len(offers):
-            offers.pop(index)
-            save_data(offers)
-    return redirect(url_for("admin"))
+@app.route("/delete/<int:idx>")
+def delete(idx):
+    if not session.get("auth"):
+        return redirect("/login")
+    offers = load_data()
+    if 0 <= idx < len(offers):
+        offers.pop(idx)
+    json.dump(offers, open(DATA_FILE, "w"), indent=2)
+    return redirect("/admin")
 
-@app.route("/set_background", methods=["POST"])
-def set_background():
-    if "logged_in" in session:
-        bg_url = request.form.get("background")
-        save_background(bg_url)
-    return redirect(url_for("admin"))
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    if request.method == "POST" and request.form.get("password") == "relevant123":
+        session["auth"] = True
+        return redirect("/admin")
+    return "<form method='post'><input name='password' type='password'><button>Login</button></form>"
 
 @app.route("/logout")
 def logout():
-    session.pop("logged_in", None)
-    return redirect(url_for("admin"))
-
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
+    session.clear()
+    return redirect("/")
