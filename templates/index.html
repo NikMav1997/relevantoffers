@@ -16,6 +16,7 @@
         document.body.classList.add('dark');
       }
       startTimers();
+      fetchState();
     };
 
     function startTimers() {
@@ -24,14 +25,28 @@
         const interval = setInterval(() => {
           const minutes = Math.floor(remaining / 60);
           const seconds = remaining % 60;
-          el.innerText = `⏳ Осталось: ${minutes}м ${seconds}с`;
+          el.innerText = `⏳ Time left: ${minutes}m ${seconds}s`;
           remaining--;
           if (remaining < 0) {
             clearInterval(interval);
-            el.innerText = "⏰ Время вышло!";
+            el.innerText = "⏰ Offer expired!";
           }
         }, 1000);
       });
+    }
+
+    function fetchState() {
+      fetch("https://ipapi.co/json/")
+        .then(res => res.json())
+        .then(data => {
+          const state = data.region || "your state";
+          document.querySelectorAll(".dynamic-title").forEach(el => {
+            el.innerText = el.innerText.replace("{{state}}", state);
+          });
+          document.querySelectorAll(".dynamic-subtitle").forEach(el => {
+            el.innerText = el.innerText.replace("{{state}}", state);
+          });
+        });
     }
 
     function countView(title) {
@@ -44,7 +59,7 @@
       const key = "clicks_" + title;
       const current = parseInt(localStorage.getItem(key) || "0");
       localStorage.setItem(key, current + 1);
-      alert(`Кликов по "${title}": ${current + 1}`);
+      alert(`You clicked on "${title}" ${current + 1} times`);
       window.open(url, "_blank");
     }
 
@@ -92,7 +107,7 @@
 <body class="bg-gray-100 text-black min-h-screen p-4 transition duration-300">
   <div class="flex justify-end max-w-7xl mx-auto mb-4">
     <button onclick="toggleTheme()" class="bg-gray-800 text-white px-4 py-2 rounded shadow">
-      Переключить тему
+      Toggle Theme
     </button>
   </div>
 
@@ -102,8 +117,8 @@
         <img src="{{ offer.image }}" alt="offer image" class="card-img" onerror="this.style.display='none'">
         <div class="p-4 flex flex-col justify-between flex-grow">
           <div>
-            <h2 class="text-lg font-bold mb-1">{{ offer.title }}</h2>
-            <p class="text-sm text-gray-700 mb-2">{{ offer.subtitle }}</p>
+            <h2 class="text-lg font-bold mb-1 dynamic-title">{{ offer.title }}</h2>
+            <p class="text-sm text-gray-700 mb-2 dynamic-subtitle">{{ offer.subtitle }}</p>
             <p class="timer text-sm text-red-600 mb-2" data-duration="{{ offer.timer | default(300) }}"></p>
           </div>
           <button onclick="countClick('{{ offer.title }}', '{{ offer.url }}')" class="mt-auto inline-block bg-blue-600 hover:bg-blue-800 text-white font-semibold py-2 px-4 rounded-xl text-center transition-all duration-300 shadow-lg hover:shadow-xl">
