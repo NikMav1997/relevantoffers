@@ -2,7 +2,7 @@
   {
     "title": "\ud83c\udfc6 Stanley Cup Giveaway",
     "subtitle": "Claim your free Stanley Cup prize in {{state}}",
-    "image": "/static/images/usa_offer_1.png, /static/images/offer_1.png",
+    "image": "/static/usa_offer_1.png,/static/offer_1.png",
     "url": "https://example.com/stanley",
     "button": "Enter Now",
     "timer": 300
@@ -10,7 +10,7 @@
   {
     "title": "\ud83c\udf81 Mystery Box",
     "subtitle": "Unlock your mystery reward in {{state}}!",
-    "image": "/static/images/usa_offer_2.png, /static/images/offer_2.png",
+    "image": "/static/usa_offer_2.png,/static/offer_2.png",
     "url": "https://example.com/mystery",
     "button": "Open Box",
     "timer": 300
@@ -18,7 +18,7 @@
   {
     "title": "\ud83d\udce6 Amazon Mystery Box",
     "subtitle": "Exclusive Amazon surprise for {{state}} residents",
-    "image": "/static/images/usa_offer_3.png, /static/images/offer_3.png",
+    "image": "/static/usa_offer_3.png,/static/offer_3.png",
     "url": "https://example.com/amazon",
     "button": "Claim Now",
     "timer": 300
@@ -26,7 +26,7 @@
   {
     "title": "\ud83d\udc57 Shein Fashion Drop",
     "subtitle": "Get a fashion box from Shein \u2014 FREE in {{state}}!",
-    "image": "/static/images/usa_offer_4.png, /static/images/offer_4.png",
+    "image": "/static/usa_offer_4.png,/static/offer_4.png",
     "url": "https://example.com/shein",
     "button": "Get Yours",
     "timer": 300
@@ -34,7 +34,7 @@
   {
     "title": "\ud83d\udecb\ufe0f IKEA Set Giveaway",
     "subtitle": "Get a complete IKEA set delivered to {{state}}",
-    "image": "/static/images/usa_offer_5.png, /static/images/offer_5.png",
+    "image": "/static/usa_offer_5.png,/static/offer_5.png",
     "url": "https://example.com/ikea",
     "button": "Win Now",
     "timer": 300
@@ -42,7 +42,7 @@
   {
     "title": "\ud83c\udf54 McDonald\u2019s VIP Menu",
     "subtitle": "Try our exclusive menu offer in {{state}}!",
-    "image": "/static/images/usa_offer_6.png, /static/images/offer_6.png",
+    "image": "/static/usa_offer_6.png,/static/offer_6.png",
     "url": "https://example.com/mcdonalds",
     "button": "Get Meal",
     "timer": 300
