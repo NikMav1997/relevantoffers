@@ -21,7 +21,7 @@
       </a>
       <div>
         <h3 class="font-bold text-lg">{{ offer.title }}</h3>
-        <p class="subtitle text-sm text-gray-700 dark:text-gray-300">{{ offer.subtitle }}</p>
+        <p class="subtitle text-sm text-gray-700 dark:text-gray-300" data-template="{{ offer.subtitle }}">{{ offer.subtitle }}</p>
         <p class="text-sm text-red-600">⏳ Time left: <span class="timer" data-time="{{ offer.timer }}">{{ offer.timer }}s</span></p>
       </div>
       <a href="{{ offer.url }}" class="mt-2 bg-blue-600 text-white text-center py-2 rounded-xl font-semibold hover:bg-blue-700 transition">{{ offer.button }}</a>
@@ -30,11 +30,9 @@
   </div>
 <script>
   const userState = window.geoState || "your state";
-  document.querySelectorAll(".offer-card").forEach(card => {
-    const subtitle = card.querySelector(".subtitle");
-    if (subtitle && subtitle.innerHTML.includes("{{state}}")) {
-      subtitle.innerHTML = subtitle.innerHTML.replaceAll("{{state}}", userState);
-    }
+  document.querySelectorAll(".subtitle").forEach(el => {
+    const template = el.dataset.template || el.innerHTML;
+    el.innerHTML = template.replaceAll("{{state}}", userState);
   });
 </script>
 </body>
