@@ -2,187 +2,40 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Relevant Offers</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    function toggleTheme() {
-      const body = document.body;
-      body.classList.toggle('dark');
-      localStorage.setItem('theme', body.classList.contains('dark') ? 'dark' : 'light');
-    }
-
-    let state = "your state";
-
-    window.onload = function () {
-      if (localStorage.getItem('theme') === 'dark') {
-        document.body.classList.add('dark');
-      }
-      startTimers();
-      fetchState();
-    };
-
-    function fetchState() {
-      fetch("https://ipapi.co/json/")
-        .then(res => res.json())
-        .then(data => {
-          state = data.region || "your state";
-          document.querySelectorAll(".dynamic-title").forEach(el => {
-            el.innerText = el.innerText.replace("{{state}}", state);
-          });
-          document.querySelectorAll(".dynamic-subtitle").forEach(el => {
-            el.innerText = el.innerText.replace("{{state}}", state);
-          });
-        });
-    }
-
-    function startTimers() {
-      document.querySelectorAll(".timer").forEach(function (el) {
-        let remaining = parseInt(el.dataset.duration);
-        const interval = setInterval(() => {
-          const minutes = Math.floor(remaining / 60);
-          const seconds = remaining % 60;
-          el.innerText = `⏳ Time left: ${minutes}m ${seconds}s`;
-          remaining--;
-          if (remaining < 0) {
-            clearInterval(interval);
-            el.innerText = "⏰ Offer expired!";
-          }
-        }, 1000);
-      });
-    }
-
-    function countView(title, imgIndex) {
-      const key = `views_${title}_img${imgIndex}`;
-      const current = parseInt(localStorage.getItem(key) || "0");
-      localStorage.setItem(key, current + 1);
-    }
-
-    function countClick(title, imgIndex, url) {
-      const key = `clicks_${title}_img${imgIndex}`;
-      const current = parseInt(localStorage.getItem(key) || "0");
-      localStorage.setItem(key, current + 1);
-      window.open(url, "_blank");
-    }
-
-    document.addEventListener("DOMContentLoaded", () => {
-      const cards = document.querySelectorAll(".offer-card");
-      cards.forEach(card => {
-        const title = card.dataset.title;
-        const images = JSON.parse(card.dataset.images);
-        const randomIndex = Math.floor(Math.random() * images.length);
-        const imgEl = card.querySelector("img");
-        const imgWrap = card.querySelector(".img-wrap");
-        imgEl.src = images[randomIndex];
-        countView(title, randomIndex);
-        imgWrap.onclick = () => countClick(title, randomIndex, card.dataset.url);
-      });
-    });
-  </script>
-  <style>
-    .card-img {
-      width: 100%;
-      max-height: 180px; height: auto;
-      object-fit: contain;
-      padding: 8px;
-      background-color: white;
-      border-radius: 0.5rem;
-    }
-    .offer-card:hover .card-img {
-      transform: scale(1.05);
-    }
-    .dark {
-      background-color: #0f172a;
-      color: white;
-    }
-    .dark .text-black {
-      color: white !important;
-    }
-    .dark .bg-white {
-      background-color: #1e293b !important;
-    }
-    .dark .text-gray-700 {
-      color: #cbd5e1 !important;
-    }
-  </style>
 </head>
-<body class="bg-gray-100 text-black min-h-screen p-4 transition duration-300">
-  <div class="flex justify-end max-w-7xl mx-auto mb-4">
-    <button onclick="toggleTheme()" class="bg-gray-800 text-white px-4 py-2 rounded shadow">
-      Toggle Theme
-    </button>
-  </div>
-
-  
-  {% if header_text %}
+<body class="bg-gray-50 text-gray-900 dark:bg-gray-900 dark:text-white">
   <div class="max-w-7xl mx-auto text-center mb-6">
     <div class="bg-yellow-100 text-yellow-800 p-4 rounded-xl shadow-md font-semibold text-lg">
       {{ header_text }}
     </div>
   </div>
-  {% endif %}
-  <div class="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" id="cards">
-
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto px-4">
     {% for offer in offers %}
-      <div class="offer-card bg-gradient-to-br from-gray-100 to-white dark:from-gray-800 dark:to-gray-700 text-black rounded-2xl shadow-2xl overflow-hidden flex flex-col transform hover:-translate-y-1 transition-all duration-300"
-           data-title="{{ offer.title }}"
-           data-url="{{ offer.url }}"
-           data-images='{{ offer.image.split(",") | map("trim") | list | tojson }}'>
-        <div class="img-wrap cursor-pointer">
-          <img src="" alt="offer image" class="card-img" onerror="this.style.display='none'">
-        </div>
-        <div class="p-4 flex flex-col justify-between flex-grow">
-          <div>
-            <h2 class="text-lg font-bold mb-1 dynamic-title">{{ offer.title }}</h2>
-            <p class="text-sm text-gray-700 mb-2 dynamic-subtitle">{{ offer.subtitle }}</p>
-            <p class="timer text-sm text-red-600 mb-2" data-duration="{{ offer.timer | default(300) }}"></p>
-          </div>
-          <button onclick="countClick('{{ offer.title }}', 0, '{{ offer.url }}')" class="w-full sm:w-auto mt-auto inline-block bg-blue-600 hover:bg-blue-800 text-white font-semibold py-2 px-4 rounded-xl text-center transition-all duration-300 shadow-lg hover:shadow-xl">
-            {{ offer.button }}
-          </button>
-        </div>
+    <div class="offer-card bg-white dark:bg-gray-800 rounded-2xl shadow p-4 flex flex-col justify-between space-y-3">
+      <a href="{{ offer.url }}">
+        <img src="{{ offer.image.split(',')[0] }}" alt="Offer" class="w-full rounded-xl">
+      </a>
+      <div>
+        <h3 class="font-bold text-lg">{{ offer.title }}</h3>
+        <p class="subtitle text-sm text-gray-700 dark:text-gray-300">{{ offer.subtitle }}</p>
+        <p class="text-sm text-red-600">⏳ Time left: <span class="timer" data-time="{{ offer.timer }}">{{ offer.timer }}s</span></p>
       </div>
+      <a href="{{ offer.url }}" class="mt-2 bg-blue-600 text-white text-center py-2 rounded-xl font-semibold hover:bg-blue-700 transition">{{ offer.button }}</a>
+    </div>
     {% endfor %}
   </div>
-
-  <div id="sticky-bar" class="fixed bottom-0 inset-x-0 bg-blue-700 text-white text-center py-3 z-50 shadow-lg">
-    🎁 $1000 Giveaway Active — <button onclick="scrollToTop()" class="underline font-semibold">Claim Now</button>
-  </div>
-
-  <script>
-    function scrollToTop() {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+<script>
+  const userState = window.geoState || "your state";
+  document.querySelectorAll(".offer-card").forEach(card => {
+    const subtitle = card.querySelector(".subtitle");
+    if (subtitle && subtitle.innerHTML.includes("{{state}}")) {
+      subtitle.innerHTML = subtitle.innerHTML.replaceAll("{{state}}", userState);
     }
-
-    document.querySelectorAll(".offer-card").forEach(card => {
-      let touchstartX = 0;
-      let touchendX = 0;
-      const title = card.dataset.title;
-
-      card.addEventListener("touchstart", e => {
-        touchstartX = e.changedTouches[0].screenX;
-      });
-
-      card.addEventListener("touchend", e => {
-        touchendX = e.changedTouches[0].screenX;
-        handleSwipe();
-      });
-
-      function handleSwipe() {
-        const delta = touchendX - touchstartX;
-        if (Math.abs(delta) < 50) return; // незначительный свайп
-        if (delta > 0) {
-          // свайп вправо — открыть
-          const images = JSON.parse(card.dataset.images);
-          countClick(title, 0, card.dataset.url);
-        } else {
-          // свайп влево — скрыть карточку
-          card.style.opacity = 0.1;
-        }
-      }
-    });
-  </script>
+  });
+</script>
 </body>
-
 </html>
