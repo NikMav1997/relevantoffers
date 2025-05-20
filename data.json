@@ -1,50 +1,50 @@
 [
   {
-    "title": "\ud83c\udfc6 Stanley Cup Giveaway",
-    "subtitle": "Claim your free Stanley Cup prize in {{state}}",
-    "image": "/static/usa_offer_1.png,/static/offer_1.png",
-    "url": "https://example.com/stanley",
-    "button": "Enter Now",
-    "timer": 300
-  },
-  {
-    "title": "\ud83c\udf81 Mystery Box",
-    "subtitle": "Unlock your mystery reward in {{state}}!",
-    "image": "/static/usa_offer_2.png,/static/offer_2.png",
-    "url": "https://example.com/mystery",
-    "button": "Open Box",
-    "timer": 300
-  },
-  {
-    "title": "\ud83d\udce6 Amazon Mystery Box",
-    "subtitle": "Exclusive Amazon surprise for {{state}} residents",
-    "image": "/static/usa_offer_3.png,/static/offer_3.png",
-    "url": "https://example.com/amazon",
+    "title": "\ud83c\udfc6 Free Stanley right now",
+    "subtitle": "Get your free Stanley Cup for a limited time!",
+    "image": "static/stanley.png",
+    "url": "https://rafflewinchance.fun/M7gtNsYr",
     "button": "Claim Now",
     "timer": 300
   },
   {
-    "title": "\ud83d\udc57 Shein Fashion Drop",
-    "subtitle": "Get a fashion box from Shein \u2014 FREE in {{state}}!",
-    "image": "/static/usa_offer_4.png,/static/offer_4.png",
-    "url": "https://example.com/shein",
-    "button": "Get Yours",
+    "title": "\ud83c\udf81 Mystery Box for you",
+    "subtitle": "Unwrap your surprise mystery gift!",
+    "image": "static/mysterybox.png",
+    "url": "https://rafflewinchance.fun/cXLQXxqd",
+    "button": "Claim Now",
     "timer": 300
   },
   {
-    "title": "\ud83d\udecb\ufe0f IKEA Set Giveaway",
-    "subtitle": "Get a complete IKEA set delivered to {{state}}",
-    "image": "/static/usa_offer_5.png,/static/offer_5.png",
-    "url": "https://example.com/ikea",
-    "button": "Win Now",
+    "title": "\ud83d\udce6 Amazon Mystery Box - real for free",
+    "subtitle": "Get exclusive Amazon mystery items inside!",
+    "image": "static/amazon.png",
+    "url": "https://rafflewinchance.fun/Drbfwt",
+    "button": "Claim Now",
     "timer": 300
   },
   {
-    "title": "\ud83c\udf54 McDonald\u2019s VIP Menu",
-    "subtitle": "Try our exclusive menu offer in {{state}}!",
-    "image": "/static/usa_offer_6.png,/static/offer_6.png",
-    "url": "https://example.com/mcdonalds",
-    "button": "Get Meal",
+    "title": "\ud83d\udc57 Shein FREE Drop",
+    "subtitle": "Claim a fashion bundle from Shein now!",
+    "image": "static/shein.png",
+    "url": "https://rafflewinchance.fun/xRC48Q7P",
+    "button": "Claim Now",
+    "timer": 300
+  },
+  {
+    "title": "\ud83d\udecb\ufe0f IKEA Set FREE",
+    "subtitle": "Receive a cozy IKEA furniture bundle!",
+    "image": "static/ikea.png",
+    "url": "https://rafflewinchance.fun/25VprKLj",
+    "button": "Claim Now",
+    "timer": 300
+  },
+  {
+    "title": "\ud83c\udf54 McDonald\u2019s FREE Meal",
+    "subtitle": "Get your full McDonald\u2019s menu combo for free!",
+    "image": "static/mcdonalds.png",
+    "url": "https://rafflewinchance.fun/x6Kpmstw",
+    "button": "Claim Now",
     "timer": 300
   }
 ]
