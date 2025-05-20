@@ -7,14 +7,14 @@
 </head>
 <body class="bg-gray-100 p-4">
   <div class="max-w-4xl mx-auto space-y-4">
-    <h1 class="text-2xl font-bold">Админка - Relevant Offers</h1>
+    <h1 class="text-2xl font-bold">Admin Panel - Relevant Offers</h1>
     <form method="POST" action="/add" class="space-y-2 bg-white p-4 rounded-xl shadow">
       <input name="title" placeholder="Title" class="w-full p-2 border rounded" required>
       <input name="subtitle" placeholder="Subtitle (use {{state}} if needed)" class="w-full p-2 border rounded">
       <input name="image" placeholder="Image URLs (comma-separated)" class="w-full p-2 border rounded" required>
-      <input name="url" placeholder="Offer URL (Keitaro stream)" class="w-full p-2 border rounded" required>
+      <input name="url" placeholder="Offer URL" class="w-full p-2 border rounded" required>
       <input name="button" placeholder="Button text" class="w-full p-2 border rounded" required>
-      <input name="timer" placeholder="Timer (in seconds)" type="number" class="w-full p-2 border rounded" required>
+      <input name="timer" placeholder="Timer (seconds)" type="number" class="w-full p-2 border rounded" required>
       <button type="submit" class="bg-green-600 text-white py-2 px-4 rounded">Add Offer</button>
     </form>
 
@@ -39,18 +39,35 @@
           ⏳ Timer: {{ offer.timer | default('300') }}s<br>
           🖼 Images: {{ offer.image }}
         </div>
+        <div id="rot-stats-{{ loop.index0 }}" class="text-xs text-gray-500 space-y-1"></div>
       </div>
     {% endfor %}
     <a href="/logout" class="text-blue-600">Logout</a>
   </div>
 
   <script>
+    function renderImageStats(title, count) {
+      let stats = "";
+      for (let i = 0; i < count; i++) {
+        const views = parseInt(localStorage.getItem(`views_${title}_img${i}`) || "0");
+        const clicks = parseInt(localStorage.getItem(`clicks_${title}_img${i}`) || "0");
+        const ctr = views > 0 ? ((clicks / views) * 100).toFixed(1) + "%" : "0%";
+        stats += `<div>Image #${i + 1}: 👁 ${views} views, 👆 ${clicks} clicks → CTR: ${ctr}</div>`;
+      }
+      return stats;
+    }
+
     window.onload = function () {
       {% for offer in offers %}
-        let keyView = "views_{{ offer.title }}";
-        let keyClick = "clicks_{{ offer.title }}";
-        document.getElementById("views_{{ loop.index0 }}").innerText = localStorage.getItem(keyView) || 0;
-        document.getElementById("clicks_{{ loop.index0 }}").innerText = localStorage.getItem(keyClick) || 0;
+        const title = "{{ offer.title }}";
+        const viewKey = "views_" + title;
+        const clickKey = "clicks_" + title;
+        document.getElementById("views_{{ loop.index0 }}").innerText = localStorage.getItem(viewKey) || 0;
+        document.getElementById("clicks_{{ loop.index0 }}").innerText = localStorage.getItem(clickKey) || 0;
+
+        const rotStats = document.getElementById("rot-stats-{{ loop.index0 }}");
+        const count = {{ offer.image.split(",") | length }};
+        rotStats.innerHTML = renderImageStats(title, count);
       {% endfor %}
     };
   </script>
