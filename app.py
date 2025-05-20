@@ -26,7 +26,29 @@ def admin():
     offers = load_data()
     bg = open(BG_FILE).read() if os.path.exists(BG_FILE) else ""
     header_text = open(HEADER_FILE).read() if os.path.exists(HEADER_FILE) else ""
-    return render_template("admin.html", offers=offers, background=bg, header_text=header_text)
+    return render_template("admin.html", offers=offers, background=bg, header_text=header_text, edit_offer=None, edit_index=None)
+
+@app.route("/edit/<int:idx>", methods=["GET", "POST"])
+def edit_offer(idx):
+    if not session.get("auth"):
+        return redirect("/login")
+    offers = load_data()
+    if request.method == "POST":
+        offers[idx] = {
+            "title": request.form["title"],
+            "subtitle": request.form["subtitle"],
+            "image": request.form["image"],
+            "url": request.form["url"],
+            "button": request.form["button"],
+            "timer": int(request.form["timer"]),
+        }
+        json.dump(offers, open(DATA_FILE, "w"), indent=2)
+        return redirect("/admin")
+    else:
+        offer = offers[idx]
+        return render_template("admin.html", offers=offers, edit_offer=offer, edit_index=idx,
+                               background=open(BG_FILE).read() if os.path.exists(BG_FILE) else "",
+                               header_text=open(HEADER_FILE).read() if os.path.exists(HEADER_FILE) else "")
 
 @app.route("/set_header", methods=["POST"])
 def set_header():
