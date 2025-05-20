@@ -14,6 +14,7 @@
       <input name="image" placeholder="URL картинки" class="w-full p-2 border rounded" required>
       <input name="url" placeholder="Keitaro-ссылка" class="w-full p-2 border rounded" required>
       <input name="button" placeholder="Надпись кнопки" class="w-full p-2 border rounded" required>
+      <input name="timer" placeholder="Таймер (в секундах)" type="number" class="w-full p-2 border rounded" required>
       <button type="submit" class="bg-green-600 text-white py-2 px-4 rounded">Добавить оффер</button>
     </form>
 
@@ -34,7 +35,8 @@
         </div>
         <div class="text-sm text-gray-600">
           👁 Просмотров: <span id="views_{{ loop.index0 }}">0</span><br>
-          👆 Кликов: <span id="clicks_{{ loop.index0 }}">0</span>
+          👆 Кликов: <span id="clicks_{{ loop.index0 }}">0</span><br>
+          ⏳ Таймер: {{ offer.timer | default('300') }} сек
         </div>
       </div>
     {% endfor %}
@@ -42,7 +44,6 @@
   </div>
 
   <script>
-    // Загружаем просмотры и клики из localStorage
     window.onload = function () {
       {% for offer in offers %}
         let keyView = "views_{{ offer.title }}";
