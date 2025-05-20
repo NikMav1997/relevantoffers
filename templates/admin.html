@@ -1,0 +1,67 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Panel - Relevant Offers</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-4">
+  <div class="max-w-4xl mx-auto space-y-4">
+    <h1 class="text-2xl font-bold">Admin Panel - Relevant Offers</h1>
+
+    <div class="flex justify-between items-center bg-white p-4 rounded-xl shadow">
+      <form method="POST" action="/set_header">
+        <input name="header" value="{{ header_text }}" placeholder="Enter banner message..." class="w-full p-2 border rounded">
+        <button type="submit" class="bg-indigo-600 text-white py-2 px-4 rounded ml-2">Save Header</button>
+      </form>
+      <a href="/export" class="ml-4 bg-green-600 text-white py-2 px-4 rounded">📥 Export Offers</a>
+    </div>
+
+    {% if edit_offer is not none %}
+    <form method="POST" action="/edit/{{ edit_index }}" class="space-y-2 bg-yellow-100 p-4 rounded-xl shadow">
+      <h2 class="font-semibold">Editing Offer #{{ edit_index + 1 }}</h2>
+      <input name="title" value="{{ edit_offer.title }}" placeholder="Title" class="w-full p-2 border rounded" required>
+      <input name="subtitle" value="{{ edit_offer.subtitle }}" placeholder="Subtitle" class="w-full p-2 border rounded">
+      <input name="image" value="{{ edit_offer.image }}" placeholder="Image URLs (comma-separated)" class="w-full p-2 border rounded" required>
+      <input name="url" value="{{ edit_offer.url }}" placeholder="Offer URL" class="w-full p-2 border rounded" required>
+      <input name="button" value="{{ edit_offer.button }}" placeholder="Button text" class="w-full p-2 border rounded" required>
+      <input name="timer" value="{{ edit_offer.timer }}" placeholder="Timer (seconds)" type="number" class="w-full p-2 border rounded" required>
+      <button type="submit" class="bg-yellow-600 text-white py-2 px-4 rounded">Save Changes</button>
+      <a href="/admin" class="ml-4 text-red-600">Cancel</a>
+    </form>
+    {% endif %}
+
+    <form method="POST" action="/add" class="space-y-2 bg-white p-4 rounded-xl shadow">
+      <input name="title" placeholder="Title" class="w-full p-2 border rounded" required>
+      <input name="subtitle" placeholder="Subtitle" class="w-full p-2 border rounded">
+      <input name="image" placeholder="Image URLs (comma-separated)" class="w-full p-2 border rounded" required>
+      <input name="url" placeholder="Offer URL" class="w-full p-2 border rounded" required>
+      <input name="button" placeholder="Button text" class="w-full p-2 border rounded" required>
+      <input name="timer" placeholder="Timer (seconds)" type="number" class="w-full p-2 border rounded" required>
+      <button type="submit" class="bg-green-600 text-white py-2 px-4 rounded">Add Offer</button>
+    </form>
+
+    <h2 class="text-xl font-bold">Current Offers</h2>
+    {% for offer in offers %}
+      <div class="bg-white p-4 rounded-xl shadow flex flex-col gap-2">
+        <div class="flex justify-between items-center">
+          <div>
+            <strong>{{ offer.title }}</strong><br>
+            <small>{{ offer.url }}</small>
+          </div>
+          <div class="space-x-4">
+            <a href="/edit/{{ loop.index0 }}" class="text-blue-600">Edit</a>
+            <a href="/delete/{{ loop.index0 }}" class="text-red-600">Delete</a>
+          </div>
+        </div>
+        <div class="text-sm text-gray-600">
+          🖼 Images: {{ offer.image }}<br>
+          ⏳ Timer: {{ offer.timer | default('300') }}s
+        </div>
+      </div>
+    {% endfor %}
+    <a href="/logout" class="text-blue-600">Logout</a>
+  </div>
+</body>
+</html>
