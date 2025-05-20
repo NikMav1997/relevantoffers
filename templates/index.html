@@ -11,18 +11,27 @@
       background-repeat: no-repeat;
       background-position: center;
     }
+    .card-img {
+      max-height: 180px;
+      object-fit: cover;
+      width: 100%;
+    }
   </style>
 </head>
 <body class="text-white bg-black bg-opacity-80 min-h-screen p-4">
-  <div class="max-w-4xl mx-auto space-y-6">
+  <div class="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
     {% for offer in offers %}
-      <div class="bg-white text-black rounded-2xl shadow-lg p-6 bg-opacity-90">
-        <h2 class="text-xl font-bold mb-2">{{ offer.title }}</h2>
-        <p class="mb-2">{{ offer.subtitle }}</p>
-        <img src="{{ offer.image }}" alt="" class="rounded-xl mb-4 w-full">
-        <a href="{{ offer.url }}" class="inline-block bg-blue-600 hover:bg-blue-800 text-white py-2 px-4 rounded-xl transition">
-          {{ offer.button }}
-        </a>
+      <div class="bg-white text-black rounded-2xl shadow-lg overflow-hidden flex flex-col">
+        <img src="{{ offer.image }}" alt="offer image" class="card-img" onerror="this.style.display='none'">
+        <div class="p-4 flex flex-col justify-between flex-grow">
+          <div>
+            <h2 class="text-lg font-bold mb-1">{{ offer.title }}</h2>
+            <p class="text-sm text-gray-600 mb-3">{{ offer.subtitle }}</p>
+          </div>
+          <a href="{{ offer.url }}" class="mt-auto inline-block bg-blue-600 hover:bg-blue-800 text-white py-2 px-4 rounded-xl text-center transition">
+            {{ offer.button }}
+          </a>
+        </div>
       </div>
     {% endfor %}
   </div>
