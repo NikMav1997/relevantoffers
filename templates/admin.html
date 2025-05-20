@@ -24,15 +24,33 @@
 
     <h2 class="text-xl font-bold">Список офферов</h2>
     {% for offer in offers %}
-      <div class="bg-white p-4 rounded-xl shadow flex justify-between items-center">
-        <div>
-          <strong>{{ offer.title }}</strong><br>
-          <small>{{ offer.url }}</small>
+      <div class="bg-white p-4 rounded-xl shadow flex flex-col gap-2">
+        <div class="flex justify-between items-center">
+          <div>
+            <strong>{{ offer.title }}</strong><br>
+            <small>{{ offer.url }}</small>
+          </div>
+          <a href="/delete/{{ loop.index0 }}" class="text-red-600">Удалить</a>
         </div>
-        <a href="/delete/{{ loop.index0 }}" class="text-red-600">Удалить</a>
+        <div class="text-sm text-gray-600">
+          👁 Просмотров: <span id="views_{{ loop.index0 }}">0</span><br>
+          👆 Кликов: <span id="clicks_{{ loop.index0 }}">0</span>
+        </div>
       </div>
     {% endfor %}
     <a href="/logout" class="text-blue-600">Выйти</a>
   </div>
+
+  <script>
+    // Загружаем просмотры и клики из localStorage
+    window.onload = function () {
+      {% for offer in offers %}
+        let keyView = "views_{{ offer.title }}";
+        let keyClick = "clicks_{{ offer.title }}";
+        document.getElementById("views_{{ loop.index0 }}").innerText = localStorage.getItem(keyView) || 0;
+        document.getElementById("clicks_{{ loop.index0 }}").innerText = localStorage.getItem(keyClick) || 0;
+      {% endfor %}
+    };
+  </script>
 </body>
 </html>
