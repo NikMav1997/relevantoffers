@@ -135,5 +135,44 @@
       </div>
     {% endfor %}
   </div>
+
+  <div id="sticky-bar" class="fixed bottom-0 inset-x-0 bg-blue-700 text-white text-center py-3 z-50 shadow-lg">
+    🎁 $1000 Giveaway Active — <button onclick="scrollToTop()" class="underline font-semibold">Claim Now</button>
+  </div>
+
+  <script>
+    function scrollToTop() {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    document.querySelectorAll(".offer-card").forEach(card => {
+      let touchstartX = 0;
+      let touchendX = 0;
+      const title = card.dataset.title;
+
+      card.addEventListener("touchstart", e => {
+        touchstartX = e.changedTouches[0].screenX;
+      });
+
+      card.addEventListener("touchend", e => {
+        touchendX = e.changedTouches[0].screenX;
+        handleSwipe();
+      });
+
+      function handleSwipe() {
+        const delta = touchendX - touchstartX;
+        if (Math.abs(delta) < 50) return; // незначительный свайп
+        if (delta > 0) {
+          // свайп вправо — открыть
+          const images = JSON.parse(card.dataset.images);
+          countClick(title, 0, card.dataset.url);
+        } else {
+          // свайп влево — скрыть карточку
+          card.style.opacity = 0.1;
+        }
+      }
+    });
+  </script>
 </body>
+
 </html>
