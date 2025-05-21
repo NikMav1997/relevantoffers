@@ -2,6 +2,11 @@
 from flask import Flask, render_template, request, redirect, session, send_file
 import json, os
 
+
+from datetime import datetime, timedelta
+from flask import Flask, render_template, request, redirect, session, send_file, jsonify
+import json, os
+
 app = Flask(__name__)
 app.secret_key = "relevant123"
 
@@ -102,6 +107,21 @@ def logout():
     session.clear()
     return redirect("/")
 
+
+@app.route("/track", methods=["POST"])
+def track():
+    from flask import jsonify
+    data = request.get_json()
+    idx = int(data.get("index", -1))
+    action = data.get("action")
+    offers = load_data()
+    if 0 <= idx < len(offers) and action in ("clicks", "views"):
+        offers[idx][action] = offers[idx].get(action, 0) + 1
+        json.dump(offers, open(DATA_FILE, "w"), indent=2)
+        return jsonify(success=True)
+    return jsonify(success=False), 400
+
 if __name__ == "__main__":
+
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port)
