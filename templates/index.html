@@ -1,0 +1,58 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Relevant Offers</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 text-gray-900 dark:bg-gray-900 dark:text-white">
+  <div class="max-w-7xl mx-auto text-center mb-6">
+    <div class="bg-yellow-100 text-yellow-800 p-4 rounded-xl shadow-md font-semibold text-lg">
+      {{ header_text }}
+    </div>
+  </div>
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto px-4">
+    {% for offer in offers %}
+    <div class="offer-card bg-white dark:bg-gray-800 rounded-2xl shadow p-4 flex flex-col justify-between space-y-3">
+      <a href="{{ offer.url }}">
+        <img src="{{ offer.image.split(',')[0] }}" alt="Offer" class="w-full rounded-xl">
+      </a>
+      <div>
+        <h3 class="font-bold text-lg">{{ offer.title }}</h3>
+        <p class="subtitle text-sm text-gray-700 dark:text-gray-300">{{ offer.subtitle }}</p>
+        <p class="text-sm text-red-600">⏳ Time left: <span class="timer" data-time="{{ offer.timer }}">{{ offer.timer }}s</span></p>
+      </div>
+      <a href="{{ offer.url }}" class="mt-2 bg-blue-600 text-white text-center py-2 rounded-xl font-semibold hover:bg-blue-700 transition">{{ offer.button }}</a>
+    </div>
+    {% endfor %}
+  </div>
+
+<script>
+  const track = (index, action) => {
+    fetch("/track", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ index, action })
+    });
+  };
+
+  // Отправка просмотра (views)
+  document.querySelectorAll(".offer-card").forEach((card, idx) => {
+    track(idx, "views");
+
+    // Клик по кнопке
+    const btn = card.querySelector("a:last-of-type");
+    if (btn) btn.addEventListener("click", () => track(idx, "clicks"));
+
+    // Клик по изображению
+    const img = card.querySelector("a img");
+    if (img && img.parentElement) {
+      img.parentElement.addEventListener("click", () => track(idx, "clicks"));
+    }
+  });
+</script>
+</body>
+
+</html>
