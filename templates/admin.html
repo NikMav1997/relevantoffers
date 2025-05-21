@@ -9,6 +9,11 @@
 <body class="bg-gray-100 p-4">
   <div class="max-w-4xl mx-auto space-y-4">
     <h1 class="text-2xl font-bold">Admin Panel - Relevant Offers</h1>
+    <div class="text-sm text-gray-700">
+      🧍 Visitors today: {{ visitor_today }} |
+      🧍‍♂️ Yesterday: {{ visitor_yesterday }} |
+      📈 Total: {{ visitor_total }}
+    </div>
 
     <div class="flex justify-between items-center bg-white p-4 rounded-xl shadow">
       <form method="POST" action="/set_header">
@@ -56,6 +61,7 @@
           </div>
         </div>
         <div class="text-sm text-gray-600">
+          📊 Views: {{ offer.views | default(0) }} | Clicks: {{ offer.clicks | default(0) }} | CTR: {{ "%.1f"|format((offer.clicks / offer.views * 100) if offer.views > 0 else 0) }}%<br>
           🖼 Images: {{ offer.image }}<br>
           ⏳ Timer: {{ offer.timer | default('300') }}s
         </div>
